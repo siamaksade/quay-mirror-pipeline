@@ -18,6 +18,7 @@
 
 
 # create build pipeline
+# update build-pipeline.yaml with quay urls to the images
 $ oc new-project demo
 $ oc create -f secrets/quay-auth-secret.yml
 $ oc apply -f secrets/pipeline-sa.yaml
