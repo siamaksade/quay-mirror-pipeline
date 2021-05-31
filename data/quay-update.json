@@ -1,0 +1,16 @@
+/* 
+
+  https://hookbin.com
+
+*/
+
+{
+  "name": "tinyapp",
+  "repository": "quayadmin/tinyapp",
+  "namespace": "quayadmin",
+  "docker_url": "quay-17e0.apps.shared-na4.na4.openshift.opentlc.com/quayadmin/tinyapp",
+  "homepage": "https://quay-17e0.apps.shared-na4.na4.openshift.opentlc.com/repository/quayadmin/tinyapp",
+  "updated_tags": [
+    "v3"
+  ]
+}

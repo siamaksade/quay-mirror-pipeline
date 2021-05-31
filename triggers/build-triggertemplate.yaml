@@ -1,0 +1,38 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: build-pipeline
+spec:
+  params:
+  - name: repository_name
+  - name: repository
+  - name: repository_namespace
+  - name: repository_url
+  - name: repository_homepage
+  - name: repository_updated_tag
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: build-pipeline-
+      labels:
+        tekton.dev/pipeline: build-pipeline
+    spec:
+      pipelineRef:
+        name: build-pipeline
+      params:
+        - name: APP_IMAGE_TAG
+          value: latest-$(tt.params.repository_updated_tag)
+        - name: BASE_IMAGE_TAG
+          value: $(tt.params.repository_updated_tag)
+      workspaces:
+        - name: workspace
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 5Gi
+              volumeMode: Filesystem
+              accessModes:
+                - ReadWriteOnce

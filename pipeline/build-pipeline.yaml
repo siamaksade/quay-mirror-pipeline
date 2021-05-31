@@ -1,0 +1,81 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-pipeline
+  labels:
+    app.kubernetes.io/instance: quarkus-app
+    pipeline.openshift.io/runtime: java
+    pipeline.openshift.io/type: kubernetes
+spec:
+  params:
+    - name: APP_NAME
+      type: string
+      default: 'quarkus-app'
+    - name: GIT_REPO
+      type: string
+      default: 'https://github.com/siamaksade/quarkus-app'
+    - name: GIT_REVISION
+      type: string
+      default: main
+    - name: APP_IMAGE_NAME
+      type: string
+      default: 'quay-96a0.apps.shared-na4.na4.openshift.opentlc.com/demo/quarkus-app'
+    - name: APP_IMAGE_TAG
+      type: string
+      default: 'latest'
+    - name: BASE_IMAGE_NAME
+      type: string
+      default: 'quay-96a0.apps.shared-na4.na4.openshift.opentlc.com/demo/rh-openjdk-11-runtime'
+    - name: BASE_IMAGE_TAG
+      type: string
+      default: latest
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.GIT_REPO)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: subdirectory
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: workspace
+    - name: build-jar
+      params:
+        - name: GOALS
+          value: 
+            - package
+            - -DskipTests
+            - -Dquarkus.package.type=uber-jar
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: maven-settings
+          workspace: workspace
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: "$(params.APP_IMAGE_NAME):$(params.APP_IMAGE_TAG)"
+        - name: BUILD_EXTRA_ARGS
+          value: "--build-arg BASE_IMAGE=$(params.BASE_IMAGE_NAME):$(params.BASE_IMAGE_TAG)"
+      runAfter:
+        - build-jar
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: workspace
+  workspaces:
+    - name: workspace
