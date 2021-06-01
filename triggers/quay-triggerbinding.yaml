@@ -2,7 +2,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: quay-triggerbinding
+  name: quay-push-repository
 spec:
   params:
   - name: repository_name
