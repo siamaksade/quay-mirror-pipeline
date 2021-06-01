@@ -88,7 +88,7 @@ Go to OpenShift Web Console and in the developer perspective in *Pipelines* sect
 
 ![](images/image-4.png)
 
-# Add Quay Notification to Start Pipeline
+## Add Quay Notification to Start Pipeline
 
 Go to the `rh-openjdk-11-runtime` image repository settings and create a *Notification*:
 * Event: `Push to Repository` 
@@ -105,3 +105,6 @@ Now it's all set. Next time Quay syncs with the Red Hat container catalog, it wi
 ![](images/image-18.png)
 
 Note that Quay sends a webhook for every tag that is synced and therefore you would see a pipeline started for each tag of the base image. Therefore it is important to incorporate base image tags in the application image tags (e.g. `<app-version>-<base-image-verision>`) to avoid overwriting the application images. 
+
+## Notes
+This demo is verified with OpenShift Pipelines 1.4 and Quay 3.x.
