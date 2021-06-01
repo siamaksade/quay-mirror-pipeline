@@ -19,13 +19,13 @@ spec:
       default: main
     - name: APP_IMAGE_NAME
       type: string
-      default: 'quay-96a0.apps.shared-na4.na4.openshift.opentlc.com/demo/quarkus-app'
+      default: 'quay-ed29.apps.shared-na4.na4.openshift.opentlc.com/demo/quarkus-app'
     - name: APP_IMAGE_TAG
       type: string
       default: 'latest'
     - name: BASE_IMAGE_NAME
       type: string
-      default: 'quay-96a0.apps.shared-na4.na4.openshift.opentlc.com/demo/rh-openjdk-11-runtime'
+      default: 'quay-ed29.apps.shared-na4.na4.openshift.opentlc.com/demo/rh-openjdk-11-runtime'
     - name: BASE_IMAGE_TAG
       type: string
       default: latest

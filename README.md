@@ -1,4 +1,4 @@
-Run Tekton Pipelines on Quay Notifications
+# Run Tekton Pipelines on Quay Image Mirroring Notifications
 
 This demo shows an example of a Tekton Pipeline on OpenShift which is triggered based on webhooks from Quay image registry. A mirrored repository 
 is configured on Quay to mirror images from Red Hat container catalog. As a result, every time a new image tag is made available in Red Hat container 
@@ -34,7 +34,11 @@ Rename the downloaded yaml for `ci` robot account credentials to `quay-auth-secr
 
 ## Configure Quay image mirroring from Red Hat container catalog
 
-Go to the `rh-openjdk-11-runtime` image repository settings and change the *Repository State* to *Mirror*. Once done, the mirror settings appear in the left sidebar. 
+Go to the `rh-openjdk-11-runtime` image repository settings and change the *Repository State* to *Mirror*. 
+
+![](images/image-12.png)
+
+Once done, the mirror settings appear in the left sidebar. 
 
 Click on mirror settings and configure the mirroring as following:
 * Location: `registry.access.redhat.com/ubi8/openjdk-11-runtime`
@@ -55,7 +59,7 @@ Click on **Enable Mirror**. The above configuration syncs the repository once ev
 
 This GitHub repository contains an example of a simple Tekton pipeline for building the [Quarkus app](https://github.com/siamaksade/quarkus-app) image using `buildah` and the `Dockerfile` that is provided in the application Git repository. The Quarkus app image is then pushed to the `quarkus-app` image repository on Quay.
 
-Create a new project on OpenShift and then create the example Tekton pipeline from this GitHub repository:
+Create a new project on OpenShift and then create the example Tekton pipeline from this GitHub repository. Before doing so, update [build-pipeline.yaml](pipeline/build-pipeline.yaml) with your Quay url in `APP_IMAGE_NAME` and `BASE_IMAGE_NAME` parameters default value:
 
 ```
 $ oc new-project demo
@@ -87,14 +91,16 @@ Go to OpenShift Web Console and in the developer perspective in *Pipelines* sect
 # Add Quay Notification to Start Pipeline
 
 Go to the `rh-openjdk-11-runtime` image repository settings and create a *Notification*:
-* When this event occurs: `Push to Repository` 
-* Webhook URL: *copy from the pipeline details in OpenShift Web Console*
+* Event: `Push to Repository` 
+* Method: `Webhook Post`
+* Webhook URL: *copy-paste from the pipeline details in OpenShift Web Console*
+* Title: `Start Pipeline on Push`
 
 
 ![](images/image-16.png)
 ![](images/image-17.png)
 
-Now it's all set. Next time Quay syncs with the Red Hat container catalog, it will trigger the pipeline to rebuild the Quarkus app image with the tags that are synced. You can trigger a manual sync to test the notification.
+Now it's all set. Next time Quay syncs with the Red Hat container catalog, it will trigger the pipeline to rebuild the Quarkus app image with the tags that are synced. You can trigger a manual sync to test the notification like how you did in the previous steps.
 
 ![](images/image-18.png)
 
