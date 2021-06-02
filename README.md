@@ -36,6 +36,8 @@ Rename the downloaded yaml for `ci` robot account credentials to `quay-auth-secr
 
 Go to the `rh-openjdk-11-runtime` image repository settings and change the *Repository State* to *Mirror*. 
 
+If you don’t see this setting that means your Red Hat Quay installation doesn’t have repository mirroring enabled. If you are using the Red Hat Quay Operator, it is enabled by default but in case at installation time you opted out, read [here](https://access.redhat.com/documentation/en-us/red_hat_quay/3.5/html/deploy_red_hat_quay_on_openshift_with_the_quay_operator/high_level_concepts#components) how to re-enable this feature. If you run Quay outside of OpenShift follow [this documentation](https://access.redhat.com/documentation/en-us/red_hat_quay/3.5/html/deploy_red_hat_quay_-_high_availability/deploying_red_hat_quay#add-repo-mirroring).
+
 ![](images/image-12.png)
 
 Once done, the mirror settings appear in the left sidebar. 
